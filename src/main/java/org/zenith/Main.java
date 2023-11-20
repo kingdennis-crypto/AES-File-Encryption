@@ -2,6 +2,11 @@ package org.zenith;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        String plain = "Hello, AES!";
+
+        CommandLine cmd = new CommandLine();
+        cmd.start();
+
+
     }
 }
