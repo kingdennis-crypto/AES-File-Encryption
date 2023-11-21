@@ -1,8 +1,8 @@
 package org.zenith.Commands;
 
 import org.zenith.Interfaces.ICommand;
-import org.zenith.Configuration;
 import org.zenith.Models.KeyProperties;
+import org.zenith.Utilities.ConfigurationHandler;
 import org.zenith.Utilities.KeyUtils;
 
 import java.io.IOException;
@@ -15,7 +15,8 @@ public class KeyCommands implements ICommand {
     KeyUtils keyUtils;
 
     public KeyCommands() {
-        keyUtils = new KeyUtils(Configuration.getProperty("keyFolderPath"));
+        ConfigurationHandler configurationHandler = new ConfigurationHandler();
+        keyUtils = new KeyUtils(configurationHandler.getProperty("keyFolderPath"));
     }
 
     @Override
