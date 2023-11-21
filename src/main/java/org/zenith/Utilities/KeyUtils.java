@@ -1,7 +1,6 @@
 package org.zenith.Utilities;
 
 import org.zenith.Models.KeyProperties;
-import org.zenith.Properties;
 
 import javax.crypto.KeyGenerator;
 import java.io.*;
@@ -19,16 +18,32 @@ public class KeyUtils {
         this.path = path;
     }
 
+    /**
+     * Generates a random nonce for the IV part of the key.
+     * @return The generated nonce.
+     */
     private byte[] getRandomNonce() {
         byte[] nonce = new byte[12];
         new SecureRandom().nextBytes(nonce);
         return nonce;
     }
 
+    /**
+     * Checks if the provided key includes '.key' and returns the correct format for the key name.
+     * @param keyName The provided key name with or without '.key'.
+     * @return The correct format for the path and key name.
+     */
     private String getKeyFormat(String keyName) {
         return keyName.endsWith(".key") ? "%s/%s" : "%s/%s.key";
     }
 
+    /**
+     * Creates a new key with the specified name.
+     * @param keyName The name of the key to be created.
+     * @return The path to the newly created key file.
+     * @throws IOException If an I/O error occurs.
+     * @throws NoSuchAlgorithmException If the specified cryptographic algorithm is not available.
+     */
     public Path createKey(String keyName) throws IOException, NoSuchAlgorithmException {
         Path dirPath = Paths.get(path);
 
@@ -60,6 +75,12 @@ public class KeyUtils {
         return Files.write(keyPath, content);
     }
 
+    /**
+     * Retrieves the {@link KeyProperties} for the specified key name.
+     * @param keyName The name of the key.
+     * @return The {@link KeyProperties} containing the key's secret and nonce.
+     * @throws IOException If an I/O error occurs.
+     */
     public KeyProperties getKey(String keyName) throws IOException {
         Path keyPath = Paths.get(String.format("%s/%s.key", path, keyName));
 
@@ -83,6 +104,11 @@ public class KeyUtils {
         return new KeyProperties(secret, nonce);
     }
 
+    /**
+     * Deletes the key with the specified name.
+     * @param keyName The name of the key to be deleted.
+     * @throws IOException If an I/O exception occurs.
+     */
     public void deleteKey(String keyName) throws IOException {
         String keyFormat = getKeyFormat(keyName);
         Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
@@ -93,6 +119,11 @@ public class KeyUtils {
         Files.delete(keyPath);
     }
 
+    /**
+     * Lists all key files in the key directory.
+     * @return A list of key file names.
+     * @throws IOException If an I/O error occurs.
+     */
     public List<String> listKeys() throws IOException {
        List<String> files = new ArrayList<>();
        Path dirPath = Paths.get(path);
