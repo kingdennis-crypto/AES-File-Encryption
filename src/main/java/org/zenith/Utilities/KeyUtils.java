@@ -82,7 +82,7 @@ public class KeyUtils {
      * @throws IOException If an I/O error occurs.
      */
     public KeyProperties getKey(String keyName) throws IOException {
-        Path keyPath = Paths.get(String.format("%s/%s.key", path, keyName));
+        Path keyPath = Paths.get(String.format(getKeyFormat(keyName), path, keyName));
 
         if (!Files.exists(keyPath)) {
             throw new FileNotFoundException(keyPath.toString());
