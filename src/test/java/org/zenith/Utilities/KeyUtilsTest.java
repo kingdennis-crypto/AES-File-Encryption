@@ -2,6 +2,7 @@ package org.zenith.Utilities;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
+import org.zenith.Models.KeyProperties;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -82,5 +83,32 @@ class KeyUtilsTest {
                 FileNotFoundException.class, () -> keyUtils.getKey(nonExistingKey));
 
         assertEquals(exception.getMessage(), tempDir.resolve(nonExistingKey + ".key").toString());
+    }
+
+    @Test
+    void shouldDeleteExistingKeyWithoutException() throws IOException, NoSuchAlgorithmException {
+        Path key = keyUtils.createKey(keys.get(0));
+
+        assertDoesNotThrow(() -> keyUtils.deleteKey(key.getFileName().toString()));
+    }
+
+    @Test
+    void shouldThrowFileNotFoundWhenDeletingKeyThatDoesNotExist() {
+        String nonExistingKey = "non-existing";
+
+        FileNotFoundException exception = assertThrows(
+                FileNotFoundException.class, () -> keyUtils.deleteKey(nonExistingKey));
+
+        assertEquals(exception.getMessage(), tempDir.resolve(nonExistingKey + ".key").toString());
+    }
+
+    @Test
+    void shouldHaveCorrectLengthOfKeyContents() throws IOException, NoSuchAlgorithmException {
+        keyUtils.createKey(keys.get(0));
+
+        KeyProperties properties = keyUtils.getKey(keys.get(0));
+
+        assertNotNull(properties);
+        assertEquals(properties.getNonce().length, 12);
     }
 }

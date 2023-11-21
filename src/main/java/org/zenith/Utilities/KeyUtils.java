@@ -25,14 +25,19 @@ public class KeyUtils {
         return nonce;
     }
 
+    private String getKeyFormat(String keyName) {
+        return keyName.endsWith(".key") ? "%s/%s" : "%s/%s.key";
+    }
+
     public Path createKey(String keyName) throws IOException, NoSuchAlgorithmException {
         Path dirPath = Paths.get(path);
 
-        if (!Files.exists(dirPath)) {
+        if (!Files.exists(dirPath))
             Files.createDirectory(dirPath);
-        }
 
-        Path keyPath = Paths.get(String.format("%s/%s.key", path, keyName));
+        String keyFormat = getKeyFormat(keyName);
+
+        Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
 
         if (Files.exists(keyPath))
             throw new FileAlreadyExistsException(keyPath.toString());
@@ -78,19 +83,14 @@ public class KeyUtils {
         return new KeyProperties(secret, nonce);
     }
 
-    public boolean deleteKey(String keyName) {
-        try {
-            boolean hasExtension = keyName.endsWith(".key");
-            String format = hasExtension ? "%s/%s" : "%s/%s.key";
+    public void deleteKey(String keyName) throws IOException {
+        String keyFormat = getKeyFormat(keyName);
+        Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
 
-            // TODO: add check if key does not exist
-            Path keyPath = Paths.get(String.format(format, path, keyName));
+        if (!Files.exists(keyPath))
+            throw new FileNotFoundException(keyPath.toString());
 
-            return Files.deleteIfExists(keyPath);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return false;
-        }
+        Files.delete(keyPath);
     }
 
     public List<String> listKeys() throws IOException {
@@ -111,8 +111,6 @@ public class KeyUtils {
            }
 
            return files;
-       } catch (IOException ex) {
-           throw ex;
        }
     }
 }
