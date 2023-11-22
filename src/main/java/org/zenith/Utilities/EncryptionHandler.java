@@ -24,6 +24,14 @@ public class EncryptionHandler {
         }
     }
 
+    public String getHexRepresentation(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b));
+        }
+        return builder.toString();
+    }
+
     public String decrypt(byte[] encrypt, SecretKey secret, byte[] iv) {
         try {
             if (encrypt == null || secret == null || iv == null)
