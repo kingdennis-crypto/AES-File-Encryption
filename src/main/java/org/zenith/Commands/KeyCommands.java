@@ -2,20 +2,20 @@ package org.zenith.Commands;
 
 import org.zenith.Models.FunctionDescription;
 import org.zenith.Models.KeyProperties;
-import org.zenith.Utilities.ConfigurationHandler;
-import org.zenith.Utilities.KeyUtils;
+import org.zenith.Handlers.ConfigurationHandler;
+import org.zenith.Handlers.KeyHandler;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class KeyCommands extends Command {
-    private final KeyUtils keyUtils;
+    private final KeyHandler keyHandler;
 
     public KeyCommands() {
         super("key", "This command is to handle the key management");
 
         ConfigurationHandler configurationHandler = new ConfigurationHandler();
-        keyUtils = new KeyUtils(configurationHandler.getProperty("keyFolderPath"));
+        keyHandler = new KeyHandler(configurationHandler.getProperty("keyFolderPath"));
 
         super.addFunction("create", new FunctionDescription("create [key]", "Create a key", this::createKey));
         super.addFunction("delete", new FunctionDescription("delete [key]", "Deletes a key", this::deleteKey));
@@ -26,7 +26,7 @@ public class KeyCommands extends Command {
     public void createKey(String[] data) {
         try {
             if (data.length > 2) {
-                keyUtils.createKey(data[2]);
+                keyHandler.createKey(data[2]);
             } else {
                 System.out.println("Missing key name. Usage: key create [keyName]");
             }
@@ -38,7 +38,7 @@ public class KeyCommands extends Command {
     public void deleteKey(String[] data) {
         try {
             if (data.length > 2) {
-                keyUtils.deleteKey(data[2]);
+                keyHandler.deleteKey(data[2]);
             } else {
                 System.out.println("Missing key name. Usage: key delete [keyName]");
             }
@@ -50,7 +50,7 @@ public class KeyCommands extends Command {
     public void getKey(String[] data) {
         try {
             if (data.length > 2) {
-                KeyProperties properties = keyUtils.getKey(data[2]);
+                KeyProperties properties = keyHandler.getKey(data[2]);
                 System.out.println("Secret key: " + Arrays.toString(properties.getSecretKey().getEncoded()));
             } else {
                 System.out.println("Missing key name. Usage: key get [keyName]");
@@ -65,7 +65,7 @@ public class KeyCommands extends Command {
 
     public void listKeys(String[] data) {
         try {
-            List<String> keys = keyUtils.listKeys();
+            List<String> keys = keyHandler.listKeys();
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0; i < keys.size(); i++) {

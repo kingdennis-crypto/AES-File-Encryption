@@ -1,4 +1,4 @@
-package org.zenith.Utilities;
+package org.zenith.Handlers;
 
 import org.zenith.Models.KeyProperties;
 
@@ -11,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class KeyUtils {
+public class KeyHandler {
     private final String path;
 
-    public KeyUtils(String path) {
+    public KeyHandler(String path) {
         this.path = path;
     }
 

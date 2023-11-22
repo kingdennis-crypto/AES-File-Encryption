@@ -1,4 +1,4 @@
-package org.zenith.Utilities;
+package org.zenith.Handlers;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;

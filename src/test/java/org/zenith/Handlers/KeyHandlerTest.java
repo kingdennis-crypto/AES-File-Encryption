@@ -1,4 +1,4 @@
-package org.zenith.Utilities;
+package org.zenith.Handlers;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
@@ -16,15 +16,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class KeyUtilsTest {
+class KeyHandlerTest {
     @TempDir
     private Path tempDir;
-    private KeyUtils keyUtils;
+    private KeyHandler keyHandler;
     private List<String> keys;
 
     @BeforeEach
     void init() {
-        keyUtils = new KeyUtils(tempDir.toString());
+        keyHandler = new KeyHandler(tempDir.toString());
         keys = List.of("key1", "key2", "key3");
     }
 
@@ -38,41 +38,41 @@ class KeyUtilsTest {
 
     @Test
     void shouldThrowExceptionForDuplicateKey() throws IOException, NoSuchAlgorithmException {
-        Path key1 = keyUtils.createKey(keys.get(0));
+        Path key1 = keyHandler.createKey(keys.get(0));
 
         FileAlreadyExistsException exception = assertThrows(
-                FileAlreadyExistsException.class, () -> keyUtils.createKey(keys.get(0)));
+                FileAlreadyExistsException.class, () -> keyHandler.createKey(keys.get(0)));
 
         assertEquals(exception.getMessage(), key1.toString());
     }
 
     @Test
     void shouldReturnCorrectNumberOfKeys() throws IOException {
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.createKey(key)));
-        assertEquals(keys.size(), keyUtils.listKeys().size());
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.deleteKey(key)));
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.createKey(key)));
+        assertEquals(keys.size(), keyHandler.listKeys().size());
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.deleteKey(key)));
 
-        assertNotEquals(keys.size(), keyUtils.listKeys().size());
-        assertEquals(0, keyUtils.listKeys().size());
+        assertNotEquals(keys.size(), keyHandler.listKeys().size());
+        assertEquals(0, keyHandler.listKeys().size());
     }
 
     @Test
     void shouldDeleteKeyWithOrWithoutExtension() throws IOException {
         // Create keys
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.createKey(key)));
-        assertEquals(keys.size(), keyUtils.listKeys().size());
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.createKey(key)));
+        assertEquals(keys.size(), keyHandler.listKeys().size());
 
         // Delete keys
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.deleteKey(key + ".key")));
-        assertEquals(keyUtils.listKeys().size(), 0);
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.deleteKey(key + ".key")));
+        assertEquals(keyHandler.listKeys().size(), 0);
 
         // Create keys
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.createKey(key)));
-        assertEquals(keys.size(), keyUtils.listKeys().size());
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.createKey(key)));
+        assertEquals(keys.size(), keyHandler.listKeys().size());
 
         // Delete keys
-        keys.forEach(key -> assertDoesNotThrow(() -> keyUtils.deleteKey(key)));
-        assertEquals(keyUtils.listKeys().size(), 0);
+        keys.forEach(key -> assertDoesNotThrow(() -> keyHandler.deleteKey(key)));
+        assertEquals(keyHandler.listKeys().size(), 0);
     }
 
     @Test
@@ -80,16 +80,16 @@ class KeyUtilsTest {
         String nonExistingKey = "non-existing";
 
         FileNotFoundException exception = assertThrows(
-                FileNotFoundException.class, () -> keyUtils.getKey(nonExistingKey));
+                FileNotFoundException.class, () -> keyHandler.getKey(nonExistingKey));
 
         assertEquals(exception.getMessage(), tempDir.resolve(nonExistingKey + ".key").toString());
     }
 
     @Test
     void shouldDeleteExistingKeyWithoutException() throws IOException, NoSuchAlgorithmException {
-        Path key = keyUtils.createKey(keys.get(0));
+        Path key = keyHandler.createKey(keys.get(0));
 
-        assertDoesNotThrow(() -> keyUtils.deleteKey(key.getFileName().toString()));
+        assertDoesNotThrow(() -> keyHandler.deleteKey(key.getFileName().toString()));
     }
 
     @Test
@@ -97,16 +97,16 @@ class KeyUtilsTest {
         String nonExistingKey = "non-existing";
 
         FileNotFoundException exception = assertThrows(
-                FileNotFoundException.class, () -> keyUtils.deleteKey(nonExistingKey));
+                FileNotFoundException.class, () -> keyHandler.deleteKey(nonExistingKey));
 
         assertEquals(exception.getMessage(), tempDir.resolve(nonExistingKey + ".key").toString());
     }
 
     @Test
     void shouldHaveCorrectLengthOfKeyContents() throws IOException, NoSuchAlgorithmException {
-        keyUtils.createKey(keys.get(0));
+        keyHandler.createKey(keys.get(0));
 
-        KeyProperties properties = keyUtils.getKey(keys.get(0));
+        KeyProperties properties = keyHandler.getKey(keys.get(0));
 
         assertNotNull(properties);
         assertEquals(properties.getNonce().length, 12);
