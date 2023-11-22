@@ -7,7 +7,15 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidParameterException;
 
 public class EncryptionHandler {
-    public byte[] encrypt(byte[] plain, SecretKey secret, byte[] iv) {
+    /**
+     * Encrypts the given byte array using the AES/GCM/NoPadding algorithm.
+     * @param plain The byte array to be encrypted.
+     * @param secret The secret key used for the encryption.
+     * @param iv The initialization vector for encryption.
+     * @return The encrypted byte array.
+     * @throws InvalidParameterException If any of the input parameters is null.
+     */
+    public byte[] encrypt(byte[] plain, SecretKey secret, byte[] iv) throws InvalidParameterException {
         try {
             if (plain == null || secret == null || iv == null)
                 throw new InvalidParameterException();
@@ -24,6 +32,11 @@ public class EncryptionHandler {
         }
     }
 
+    /**
+     * Converts a byte array to its hexadecimal representation.
+     * @param bytes The byte array to be represented in hexadecimal.
+     * @return The hexadecimal representation
+     */
     public String getHexRepresentation(byte[] bytes) {
         StringBuilder builder = new StringBuilder();
         for (byte b : bytes) {
@@ -32,6 +45,14 @@ public class EncryptionHandler {
         return builder.toString();
     }
 
+    /**
+     * Decrypts the given byte array using the AES/GCM/NoPadding algorithm.
+     * @param encrypt The encrypted byte array to be decrypted.
+     * @param secret The secret key used for the encryption.
+     * @param iv The initialization vector for encryption.
+     * @return The decrypted string.
+     * @throws InvalidParameterException If any of the input parameters is null.
+     */
     public String decrypt(byte[] encrypt, SecretKey secret, byte[] iv) {
         try {
             if (encrypt == null || secret == null || iv == null)
