@@ -6,8 +6,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class KeyProperties {
-    private SecretKey secretKey;
-    private byte[] nonce;
+    private final SecretKey secretKey;
+    private final byte[] nonce;
 
     public KeyProperties(byte[] secret, byte[] nonce) {
         this.secretKey = new SecretKeySpec(secret, "AES");

@@ -3,19 +3,17 @@ package org.zenith;
 import org.zenith.Commands.Command;
 import org.zenith.Commands.EncryptionCommands;
 import org.zenith.Commands.KeyCommands;
-import org.zenith.Commands.TestCommands;
 
 import java.util.*;
 
 public class CommandLine {
-    private Map<String, Command> commands;
+    private final Map<String, Command> commands;
 
     public CommandLine() {
         commands = new HashMap<>();
 
         commands.put("key", new KeyCommands());
         commands.put("encrypt", new EncryptionCommands());
-        commands.put("test", new TestCommands());
     }
 
     public void start() {
@@ -34,8 +32,6 @@ public class CommandLine {
                     System.out.println("Exiting the program.");
                     System.exit(0);
                 } else if (command.equals("help") || command.equals("h")) {
-                    List<String> keys = commands.keySet().stream().toList();
-
                     System.out.println("All available commands (each command has it's own subcommands):\n");
 
                     if (commandParts.length > 1) {
@@ -43,7 +39,7 @@ public class CommandLine {
                         cInterface.getHelp();
                     } else {
                         for (Command cInterface : commands.values()) {
-                            System.out.println("Usage: " + cInterface.getUsage() + ", Description: " + cInterface.getDescription());
+                            System.out.printf("%-20s %s%n", cInterface.getUsage() + ":", cInterface.getDescription());
                         }
                     }
 
@@ -54,7 +50,9 @@ public class CommandLine {
                     if (commandParts.length > 1) {
                         cInterface.runFunction(commandParts[1], commandParts);
                     } else {
+                        System.out.println();
                         cInterface.getHelp();
+                        System.out.println();
                     }
                 } else {
                     unknownCommand(command);
