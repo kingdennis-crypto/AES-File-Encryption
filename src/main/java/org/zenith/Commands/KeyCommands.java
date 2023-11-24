@@ -14,16 +14,17 @@ public class KeyCommands extends Command {
     public KeyCommands() {
         super("key", "This command is to handle the key management");
 
-        ConfigurationHandler configurationHandler = new ConfigurationHandler();
-        keyHandler = new KeyHandler(configurationHandler.getProperty("keyFolderPath"));
+        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
+        keyHandler = new KeyHandler(configurationHandler.getProperty("KEY_PATH"));
 
         super.addFunction("create", new FunctionDescription("create [key]", "Create a key", this::createKey));
         super.addFunction("delete", new FunctionDescription("delete [key]", "Deletes a key", this::deleteKey));
         super.addFunction("get", new FunctionDescription("get [key]", "Gets a key", this::getKey));
         super.addFunction("list", new FunctionDescription("list", "Lists all generated keys", this::listKeys));
+        super.addFunction("select", new FunctionDescription("select [key]", "Selects the key to use with encryption and decryption", this::selectKey));
     }
 
-    public void createKey(String[] data) {
+    private void createKey(String[] data) {
         try {
             if (data.length > 2) {
                 keyHandler.createKey(data[2]);
@@ -35,7 +36,7 @@ public class KeyCommands extends Command {
         }
     }
 
-    public void deleteKey(String[] data) {
+    private void deleteKey(String[] data) {
         try {
             if (data.length > 2) {
                 keyHandler.deleteKey(data[2]);
@@ -47,7 +48,7 @@ public class KeyCommands extends Command {
         }
     }
 
-    public void getKey(String[] data) {
+    private void getKey(String[] data) {
         try {
             if (data.length > 2) {
                 KeyProperties properties = keyHandler.getKey(data[2]);
@@ -60,10 +61,18 @@ public class KeyCommands extends Command {
         }
     }
 
-    // TODO: Create function to select this key and to store it as usable key for the encryption
-    public void selectKey(String[] data) {}
+    private void selectKey(String[] data) {
+        try {
+            System.out.println(Arrays.toString(data));
+            if (data.length > 2) {
+                keyHandler.selectKeys(data[2]);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
-    public void listKeys(String[] data) {
+    private void listKeys(String[] data) {
         try {
             List<String> keys = keyHandler.listKeys();
             StringBuilder stringBuilder = new StringBuilder();
