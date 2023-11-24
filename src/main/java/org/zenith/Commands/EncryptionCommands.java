@@ -6,8 +6,7 @@ import org.zenith.Handlers.ConfigurationHandler;
 import org.zenith.Handlers.EncryptionHandler;
 import org.zenith.Handlers.KeyHandler;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.io.IOException;
 
 public class EncryptionCommands extends Command {
     private final EncryptionHandler encryptionHandler;
@@ -16,28 +15,43 @@ public class EncryptionCommands extends Command {
     public EncryptionCommands() {
         super("encryption", "This command is to handle the encryption");
 
-        ConfigurationHandler configurationHandler = new ConfigurationHandler();
         encryptionHandler = new EncryptionHandler();
-        keyHandler = new KeyHandler(configurationHandler.getProperty("keyFolderPath"));
+        keyHandler = new KeyHandler(ConfigurationHandler.getInstance().getProperty("KEY_PATH"));
 
-        super.addFunction("test", new FunctionDescription("text", "Encrypts a string", this::encryptText));
+        super.addFunction("encrypt", new FunctionDescription("encrypt [path]", "Encrypt a given path", this::encryptFile));
+        super.addFunction("decrypt", new FunctionDescription("decrypt [path]", "Decrypt a given path", this::decryptFile));
     }
 
-    public void encryptText(String[] data) {
+    private void encryptFile(String[] data) {
         try {
-            KeyProperties key = keyHandler.getKey("key1");
-
             if (data.length > 2) {
-                byte[] encrypted = encryptionHandler.encrypt(data[2].getBytes(), key.getSecretKey(), key.getNonce());
-                String decrypted = encryptionHandler.decrypt(encrypted, key.getSecretKey(), key.getNonce());
+                KeyProperties key = keyHandler.getKey(ConfigurationHandler.getInstance().getProperty("SELECTED_KEY"));
+                encryptionHandler.encryptFile(data[2], key.getSecretKey(), key.getNonce());
 
-                System.out.println(new String(encrypted, StandardCharsets.UTF_8));
-                System.out.println(Arrays.toString(encrypted));
-                System.out.println(decrypted);
+                System.out.println("Successfully encrypted");
             } else {
-                System.out.println("Missing text to encrypt");
+                System.out.println("No file path was given");
             }
-        } catch (Exception ex) {
+        } catch (NullPointerException ex) {
+            System.out.println(ex.getMessage());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void decryptFile(String[] data) {
+        try {
+            if (data.length > 2) {
+                KeyProperties key = keyHandler.getKey(ConfigurationHandler.getInstance().getProperty("SELECTED_KEY"));
+                encryptionHandler.decryptFile(data[2], key.getSecretKey(), key.getNonce());
+
+                System.out.println("Successfully decrypted");
+            } else {
+                System.out.println("No file path was given");
+            }
+        } catch (NullPointerException ex) {
+            System.err.println(ex.getMessage());
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
     }

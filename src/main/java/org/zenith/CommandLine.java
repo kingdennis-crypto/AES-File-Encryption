@@ -13,7 +13,7 @@ public class CommandLine {
         commands = new HashMap<>();
 
         commands.put("key", new KeyCommands());
-        commands.put("encrypt", new EncryptionCommands());
+        commands.put("encryption", new EncryptionCommands());
     }
 
     public void start() {

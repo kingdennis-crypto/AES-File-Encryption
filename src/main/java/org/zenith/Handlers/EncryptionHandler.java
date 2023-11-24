@@ -159,11 +159,9 @@ public class EncryptionHandler {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, secret, new GCMParameterSpec(128, iv));
 
-//            byte[] decryptedBytes = cipher.doFinal(encrypt);
             byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encrypt));
-            String decrypted = new String(decryptedBytes, StandardCharsets.UTF_8);
 
-            return decrypted;
+            return new String(decryptedBytes, StandardCharsets.UTF_8);
         } catch (InvalidParameterException ex) {
             throw ex;
         } catch (Exception ex) {
