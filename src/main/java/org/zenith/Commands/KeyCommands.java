@@ -17,11 +17,11 @@ public class KeyCommands extends Command {
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         keyHandler = new KeyHandler(configurationHandler.getProperty("KEY_PATH"));
 
-        super.addFunction("create", new FunctionDescription("create [key]", "Create a key", this::createKey));
-        super.addFunction("delete", new FunctionDescription("delete [key]", "Deletes a key", this::deleteKey));
-        super.addFunction("get", new FunctionDescription("get [key]", "Gets a key", this::getKey));
-        super.addFunction("list", new FunctionDescription("list", "Lists all generated keys", this::listKeys));
-        super.addFunction("select", new FunctionDescription("select [key]", "Selects the key to use with encryption and decryption", this::selectKey));
+        super.addFunction("create", new FunctionDescription("create [key]", "Creates a new cryptographic key with the specified name.", this::createKey));
+        super.addFunction("delete", new FunctionDescription("delete [key]", "Deletes an existing cryptographic key with the specified name.", this::deleteKey));
+        super.addFunction("get", new FunctionDescription("get [key]", "Retrieves information about an existing cryptographic key.", this::getKey));
+        super.addFunction("list", new FunctionDescription("list", "Lists all generated cryptographic keys.", this::listKeys));
+        super.addFunction("select", new FunctionDescription("select [key]", "Selects a cryptographic key for encryption and decryption.", this::selectKey));
     }
 
     private void createKey(String[] data) {

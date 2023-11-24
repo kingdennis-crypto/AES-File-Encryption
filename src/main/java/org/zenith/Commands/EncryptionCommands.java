@@ -18,8 +18,8 @@ public class EncryptionCommands extends Command {
         encryptionHandler = new EncryptionHandler();
         keyHandler = new KeyHandler(ConfigurationHandler.getInstance().getProperty("KEY_PATH"));
 
-        super.addFunction("encrypt", new FunctionDescription("encrypt [path]", "Encrypt a given path", this::encryptFile));
-        super.addFunction("decrypt", new FunctionDescription("decrypt [path]", "Decrypt a given path", this::decryptFile));
+        super.addFunction("encrypt", new FunctionDescription("encrypt [path]", "Encrypts the file located at the specified path.", this::encryptFile));
+        super.addFunction("decrypt", new FunctionDescription("decrypt [path]", "Decrypts the file located at the specified path.", this::decryptFile));
     }
 
     private void encryptFile(String[] data) {
