@@ -44,7 +44,10 @@ public class KeyHandler {
      * @throws IOException If an I/O error occurs.
      * @throws NoSuchAlgorithmException If the specified cryptographic algorithm is not available.
      */
-    public Path createKey(String keyName) throws IOException, NoSuchAlgorithmException {
+    public Path createKey(String keyName) throws IOException, NoSuchAlgorithmException, NullPointerException {
+        if (keyName == null)
+            throw new NullPointerException("There is no default key selected for encryption or decryption");
+
         Path dirPath = Paths.get(path);
 
         if (!Files.exists(dirPath))
@@ -81,7 +84,10 @@ public class KeyHandler {
      * @return The {@link KeyProperties} containing the key's secret and nonce.
      * @throws IOException If an I/O error occurs.
      */
-    public KeyProperties getKey(String keyName) throws IOException {
+    public KeyProperties getKey(String keyName) throws IOException, NullPointerException {
+        if (keyName == null)
+            throw new NullPointerException("There is no default key selected for encryption or decryption");
+
         Path keyPath = Paths.get(String.format(getKeyFormat(keyName), path, keyName));
 
         if (!Files.exists(keyPath)) {
@@ -109,7 +115,10 @@ public class KeyHandler {
      * @param keyName The name of the key to be deleted.
      * @throws IOException If an I/O exception occurs.
      */
-    public void deleteKey(String keyName) throws IOException {
+    public void deleteKey(String keyName) throws IOException, NullPointerException {
+        if (keyName == null)
+            throw new NullPointerException("There is no default key selected for encryption or decryption");
+
         String keyFormat = getKeyFormat(keyName);
         Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
 
@@ -151,10 +160,10 @@ public class KeyHandler {
      * @throws NullPointerException If the provided key is null.
      */
     public void selectKeys(String key) throws NullPointerException {
-        ConfigurationHandler configuration = ConfigurationHandler.getInstance();
-
         if (key == null)
-            throw new NullPointerException("Key cannot be null");
+            throw new NullPointerException("There is no default key selected for encryption or decryption");
+
+        ConfigurationHandler configuration = ConfigurationHandler.getInstance();
 
         configuration.setProperty("SELECTED_KEY", key.endsWith(".key") ? key : key + ".key");
         configuration.saveProperties();
