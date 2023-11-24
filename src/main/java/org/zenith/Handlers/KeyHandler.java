@@ -144,4 +144,19 @@ public class KeyHandler {
            return files;
        }
     }
+
+    /**
+     * Changes the selected key by updating the properties file.
+     * @param key The key to be selected. If it doesn't end with '.key', '.key' will be appended.
+     * @throws NullPointerException If the provided key is null.
+     */
+    public void selectKeys(String key) throws NullPointerException {
+        ConfigurationHandler configuration = ConfigurationHandler.getInstance();
+
+        if (key == null)
+            throw new NullPointerException("Key cannot be null");
+
+        configuration.setProperty("SELECTED_KEY", key.endsWith(".key") ? key : key + ".key");
+        configuration.saveProperties();
+    }
 }
