@@ -1,12 +1,12 @@
 package org.zenith;
 
+import org.zenith.Handlers.ConfigurationHandler;
+
 public class Main {
     public static void main(String[] args) {
-        String plain = "Hello, AES!";
+        ConfigurationHandler.getInstance();
 
         CommandLine cmd = new CommandLine();
         cmd.start();
-
-
     }
 }
