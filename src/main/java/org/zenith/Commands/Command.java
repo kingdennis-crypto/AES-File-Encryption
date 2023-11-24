@@ -2,7 +2,9 @@ package org.zenith.Commands;
 
 import org.zenith.Models.FunctionDescription;
 
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Command {
@@ -41,7 +43,12 @@ public abstract class Command {
     }
 
     public void getHelp() {
-        for (FunctionDescription function : functions.values()) {
+        List<FunctionDescription> functionList = functions.values()
+                .stream()
+                .sorted(Comparator.comparingInt(o -> o.getUsage().length()))
+                .toList();
+
+        for (FunctionDescription function : functionList) {
             System.out.printf("%-20s %s%n", function.getUsage() + ":", function.getDescription());
         }
     }
