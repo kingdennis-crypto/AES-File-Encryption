@@ -1,5 +1,6 @@
 package org.zenith.Commands;
 
+import org.zenith.Annotations.Usage;
 import org.zenith.Models.FunctionDescription;
 import org.zenith.Models.KeyProperties;
 import org.zenith.Handlers.ConfigurationHandler;
@@ -8,11 +9,12 @@ import org.zenith.Handlers.KeyHandler;
 import java.util.Arrays;
 import java.util.List;
 
+@Usage(usage = "key", description = "Commands for managing and handling the cryptographic keys")
 public class KeyCommands extends Command {
     private final KeyHandler keyHandler;
 
     public KeyCommands() {
-        super("key", "This command is to handle the key management");
+        super();
 
         ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
         keyHandler = new KeyHandler(configurationHandler.getProperty("KEY_PATH"));

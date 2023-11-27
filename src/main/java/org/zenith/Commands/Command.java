@@ -8,23 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Command {
-    private final String usage;
-    private final String description;
     private final Map<String, FunctionDescription> functions;
 
-    public Command(String usage, String description) {
-        this.usage = usage;
-        this.description = description;
-
+    public Command() {
         functions = new HashMap<>();
-    }
-
-    public String getUsage() {
-        return usage;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public void addFunction(String key, FunctionDescription function) {
