@@ -16,8 +16,7 @@ public class KeyCommands extends Command {
     public KeyCommands() {
         super();
 
-        ConfigurationHandler configurationHandler = ConfigurationHandler.getInstance();
-        keyHandler = new KeyHandler(configurationHandler.getProperty("KEY_PATH"));
+        keyHandler = new KeyHandler();
 
         super.addFunction("create", new FunctionDescription("create [key]", "Creates a new cryptographic key with the specified name.", this::createKey));
         super.addFunction("delete", new FunctionDescription("delete [key]", "Deletes an existing cryptographic key with the specified name.", this::deleteKey));
