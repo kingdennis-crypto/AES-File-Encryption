@@ -1,6 +1,6 @@
 package org.zenith;
 
-import org.zenith.Annotations.Usage;
+import org.zenith.Annotations.UsageAnnotation;
 import org.zenith.Commands.Command;
 import org.zenith.Commands.EncryptionCommands;
 import org.zenith.Commands.KeyCommands;
@@ -40,7 +40,7 @@ public class CommandLine {
                         cInterface.getHelp();
                     } else {
                         for (Command cInterface : commands.values()) {
-                            Usage annotation = cInterface.getClass().getAnnotation(Usage.class);
+                            UsageAnnotation annotation = cInterface.getClass().getAnnotation(UsageAnnotation.class);
                             System.out.printf("%-20s %s%n", annotation.usage() + ":", annotation.description());
                         }
                     }

@@ -1,6 +1,6 @@
 package org.zenith.Commands;
 
-import org.zenith.Annotations.Usage;
+import org.zenith.Annotations.UsageAnnotation;
 import org.zenith.Models.FunctionDescription;
 import org.zenith.Models.KeyProperties;
 import org.zenith.Handlers.ConfigurationHandler;
@@ -9,7 +9,7 @@ import org.zenith.Handlers.KeyHandler;
 
 import java.io.IOException;
 
-@Usage(usage = "encryption", description = "Commands for handling encryption and decryption of files")
+@UsageAnnotation(usage = "encryption", description = "Commands for handling encryption and decryption of files")
 public class EncryptionCommands extends Command {
     private final EncryptionHandler encryptionHandler;
     private final KeyHandler keyHandler;
