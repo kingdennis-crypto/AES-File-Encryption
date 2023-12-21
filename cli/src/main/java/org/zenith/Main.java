@@ -5,8 +5,7 @@ import org.zenith.Handlers.ConfigurationHandler;
 public class Main {
     public static void main(String[] args) {
         ConfigurationHandler.getInstance();
-
-        CommandLine cmd = new CommandLine();
+        CommandLineInterface cmd = new CommandLineInterface();
         cmd.start();
     }
 }

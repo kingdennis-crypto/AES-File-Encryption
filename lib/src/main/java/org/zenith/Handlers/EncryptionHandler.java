@@ -49,11 +49,18 @@ public class EncryptionHandler {
      */
     private void readAndWriteToFile(Cipher cipher, String path, boolean willEncrypt) {
         try {
+            // TODO: Recheck and rewrite this inline if statement
             File inputFile = new File(willEncrypt ? path : path + ".encrypted");
             File outputFile = new File(willEncrypt ? path + ".encrypted" : path);
 
             FileInputStream inputStream = new FileInputStream(inputFile);
             FileOutputStream outputStream = new FileOutputStream(outputFile);
+
+            // TODO: Add a header in the bytes
+            String[] fileNameDetails = inputFile.getName().split("\\.");
+
+            String extension = fileNameDetails[fileNameDetails.length - 1];
+            int extensionLength = String.valueOf(extension.length()).length();
 
             byte[] buffer = new byte[64];
             int bytesRead;

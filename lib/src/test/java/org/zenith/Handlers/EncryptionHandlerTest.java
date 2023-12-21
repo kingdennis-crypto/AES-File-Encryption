@@ -2,13 +2,13 @@ package org.zenith.Handlers;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.TempDir;
-import org.zenith.Models.KeyProperties;
+import org.zenith.Handlers.EncryptionHandler;
+import org.zenith.Handlers.KeyHandler;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.InvalidParameterException;

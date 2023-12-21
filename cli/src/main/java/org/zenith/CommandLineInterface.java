@@ -7,10 +7,10 @@ import org.zenith.Commands.KeyCommands;
 
 import java.util.*;
 
-public class CommandLine {
+public class CommandLineInterface {
     private final Map<String, Command> commands;
 
-    public CommandLine() {
+    public CommandLineInterface() {
         commands = new HashMap<>();
 
         commands.put("key", new KeyCommands());
