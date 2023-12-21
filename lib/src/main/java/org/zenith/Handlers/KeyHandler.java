@@ -15,7 +15,7 @@ public class KeyHandler {
     private final String path;
 
     public KeyHandler() {
-        this(ConfigurationHandler.getInstance().getProperty("KEY_PATH"));
+        this(PathHandler.getFolderPath(".encryption_keys"));
     }
 
     public KeyHandler(String path) {
