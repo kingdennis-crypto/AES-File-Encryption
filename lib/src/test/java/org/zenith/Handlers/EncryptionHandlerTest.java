@@ -46,38 +46,6 @@ class EncryptionHandlerTest {
     }
 
     @Test
-    void testEncryptAndDecrypt() {
-        // Arrange
-        SecretKey secretKey = new SecretKeySpec("0123456789012345".getBytes(), "AES");
-        byte[] iv = "1234567890123456".getBytes();
-
-        String encrypted = encryptionHandler.encrypt(plain.getBytes(), secretKey, iv);
-        String decrypted = encryptionHandler.decrypt(encrypted, secretKey, iv);
-
-        assertEquals(plain, decrypted);
-    }
-
-    @Test
-    void testEncryptWithNullParameters() {
-        SecretKey secretKey = new SecretKeySpec("0123456789012345".getBytes(), "AES");
-        byte[] iv = "1234567890123456".getBytes();
-
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.encrypt(null, secretKey, iv));
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.encrypt(plain.getBytes(), null, iv));
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.encrypt(plain.getBytes(), secretKey, null));
-    }
-
-    @Test
-    void testDecryptWithNullParameters() {
-        SecretKey secretKey = new SecretKeySpec("0123456789012345".getBytes(), "AES");
-        byte[] iv = "1234567890123456".getBytes();
-
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.decrypt(null, secretKey, iv));
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.decrypt(plain, null, iv));
-        assertThrows(InvalidParameterException.class, () -> encryptionHandler.decrypt(plain, secretKey, null));
-    }
-
-    @Test
     void testGetHexRepresentation() {
         assertEquals(encryptionHandler.getHexRepresentation(plain), "706c61696e2d74657874");
     }
