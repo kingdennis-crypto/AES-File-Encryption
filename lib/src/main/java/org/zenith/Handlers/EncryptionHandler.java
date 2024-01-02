@@ -88,6 +88,17 @@ public class EncryptionHandler {
         }
     }
 
+    /**
+     * Converts data from an InputStream to a byte array using the provided Cipher.
+     *
+     * @param inputStream   The InputStream containing the input data.
+     * @param cipher        The Cipher instance used for transformation.
+     * @param outputStream  The ByteArrayOutputStream for the transformed data.
+     * @return              The byte array containing the transformed data.
+     * @throws IOException                  If an I/O error occurs during reading from the InputStream.
+     * @throws IllegalBlockSizeException    If the block size of the Cipher is invalid during transformation.
+     * @throws BadPaddingException          If padding is expected but not properly applied during transformation.
+     */
     private ByteArrayOutputStream fileToByteArray(InputStream inputStream, Cipher cipher, ByteArrayOutputStream outputStream) throws IOException, IllegalBlockSizeException, BadPaddingException {
         int bufferSize = 1024;
         byte[] buffer = new byte[bufferSize];
