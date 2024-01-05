@@ -89,7 +89,32 @@ public class EncryptionHandler {
     }
 
     /**
-     * Converts data from an InputStream to a byte array using the provided Cipher.
+     * Converts a string to its hexadecimal representation.
+     *
+     * @param bytes The string to be represented in hexadecimal.
+     * @return The hexadecimal representation of the string.
+     */
+    public String getHexRepresentation(String bytes) {
+        return getHexRepresentation(bytes.getBytes());
+    }
+
+    /**
+     * Converts a byte array to its hexadecimal representation.
+     *
+     * @param bytes The byte array to be represented in hexadecimal.
+     * @return The hexadecimal representation of the byte array.
+     */
+    public String getHexRepresentation(byte[] bytes) {
+        StringBuilder builder = new StringBuilder();
+        for (byte b : bytes) {
+            builder.append(String.format("%02x", b));
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * Converts data from an {@link InputStream} to a byte array using the provided {@link Cipher}.
      *
      * @param inputStream   The InputStream containing the input data.
      * @param cipher        The Cipher instance used for transformation.
@@ -119,30 +144,5 @@ public class EncryptionHandler {
         }
 
         return outputStream;
-    }
-
-    /**
-     * Converts a string to its hexadecimal representation.
-     *
-     * @param bytes The string to be represented in hexadecimal.
-     * @return The hexadecimal representation of the string.
-     */
-    public String getHexRepresentation(String bytes) {
-        return getHexRepresentation(bytes.getBytes());
-    }
-
-    /**
-     * Converts a byte array to its hexadecimal representation.
-     *
-     * @param bytes The byte array to be represented in hexadecimal.
-     * @return The hexadecimal representation of the byte array.
-     */
-    public String getHexRepresentation(byte[] bytes) {
-        StringBuilder builder = new StringBuilder();
-        for (byte b : bytes) {
-            builder.append(String.format("%02x", b));
-        }
-
-        return builder.toString();
     }
 }

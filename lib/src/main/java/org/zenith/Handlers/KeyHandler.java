@@ -12,33 +12,14 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class KeyHandler {
-    private final String path;
+    private final String PATH;
 
     public KeyHandler() {
         this(PathHandler.getFolderPath(".encryption_keys"));
     }
 
     public KeyHandler(String path) {
-        this.path = path;
-    }
-
-    /**
-     * Generates a random nonce for the IV part of the key.
-     * @return The generated nonce.
-     */
-    private byte[] getRandomNonce() {
-        byte[] nonce = new byte[12];
-        new SecureRandom().nextBytes(nonce);
-        return nonce;
-    }
-
-    /**
-     * Checks if the provided key includes '.key' and returns the correct format for the key name.
-     * @param keyName The provided key name with or without '.key'.
-     * @return The correct format for the path and key name.
-     */
-    private String getKeyFormat(String keyName) {
-        return keyName.endsWith(".key") ? "%s/%s" : "%s/%s.key";
+        this.PATH = path;
     }
 
     /**
@@ -52,14 +33,14 @@ public class KeyHandler {
         if (keyName == null)
             throw new NullPointerException("There is no default key selected for encryption or decryption");
 
-        Path dirPath = Paths.get(path);
+        Path dirPath = Paths.get(PATH);
 
         if (!Files.exists(dirPath))
             Files.createDirectory(dirPath);
 
         String keyFormat = getKeyFormat(keyName);
 
-        Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
+        Path keyPath = Paths.get(String.format(keyFormat, PATH, keyName));
 
         if (Files.exists(keyPath))
             throw new FileAlreadyExistsException(keyPath.toString());
@@ -92,7 +73,7 @@ public class KeyHandler {
         if (keyName == null)
             throw new NullPointerException("There is no default key selected for encryption or decryption");
 
-        Path keyPath = Paths.get(String.format(getKeyFormat(keyName), path, keyName));
+        Path keyPath = Paths.get(String.format(getKeyFormat(keyName), PATH, keyName));
 
         if (!Files.exists(keyPath)) {
             throw new FileNotFoundException(keyPath.toString());
@@ -124,7 +105,7 @@ public class KeyHandler {
             throw new NullPointerException("There is no default key selected for encryption or decryption");
 
         String keyFormat = getKeyFormat(keyName);
-        Path keyPath = Paths.get(String.format(keyFormat, path, keyName));
+        Path keyPath = Paths.get(String.format(keyFormat, PATH, keyName));
 
         if (!Files.exists(keyPath))
             throw new FileNotFoundException(keyPath.toString());
@@ -138,24 +119,24 @@ public class KeyHandler {
      * @throws IOException If an I/O error occurs.
      */
     public List<String> listKeys() throws IOException {
-       List<String> files = new ArrayList<>();
-       Path dirPath = Paths.get(path);
+        List<String> files = new ArrayList<>();
+        Path dirPath = Paths.get(PATH);
 
-       if (!Files.exists(dirPath)) {
-           return files;
-       }
+        if (!Files.exists(dirPath)) {
+            return files;
+        }
 
-       try (Stream<Path> filesInDir = Files.list(dirPath)) {
-           for (Path filePath : filesInDir.toList()) {
-               File file = new File(filePath.toUri());
+        try (Stream<Path> filesInDir = Files.list(dirPath)) {
+            for (Path filePath : filesInDir.toList()) {
+                File file = new File(filePath.toUri());
 
-               if (file.isFile() && file.getName().endsWith(".key")) {
-                   files.add(file.getName());
-               }
-           }
+                if (file.isFile() && file.getName().endsWith(".key")) {
+                    files.add(file.getName());
+                }
+            }
 
-           return files;
-       }
+            return files;
+        }
     }
 
     /**
@@ -171,5 +152,24 @@ public class KeyHandler {
 
         configuration.setProperty("SELECTED_KEY", key.endsWith(".key") ? key : key + ".key");
         configuration.saveProperties();
+    }
+
+    /**
+     * Generates a random nonce for the IV part of the key.
+     * @return The generated nonce.
+     */
+    private byte[] getRandomNonce() {
+        byte[] nonce = new byte[12];
+        new SecureRandom().nextBytes(nonce);
+        return nonce;
+    }
+
+    /**
+     * Checks if the provided key includes '.key' and returns the correct format for the key name.
+     * @param keyName The provided key name with or without '.key'.
+     * @return The correct format for the path and key name.
+     */
+    private String getKeyFormat(String keyName) {
+        return keyName.endsWith(".key") ? "%s/%s" : "%s/%s.key";
     }
 }
