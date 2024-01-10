@@ -18,10 +18,13 @@ public class EncryptionHandler {
      * @param secret The secret key used for encryption.
      * @param iv     The initialization vector for encryption
      */
-    public void encryptFile(String path, SecretKey secret, byte[] iv) {
+    public void encryptFile(String path, SecretKey secret, byte[] iv) throws FileNotFoundException {
         try {
             File inputFile = new File(path);
             File outputFile = new File(path + ".encrypted");
+
+            if (!inputFile.exists())
+                throw new FileNotFoundException(String.format("File %s does not exist", inputFile.getName()));
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.ENCRYPT_MODE, secret, new GCMParameterSpec(128, iv));
@@ -37,6 +40,8 @@ public class EncryptionHandler {
                 ByteArrayOutputStream encryptedContent = fileToByteArray(inputStream, cipher, new ByteArrayOutputStream());
                 outputStream.write(encryptedContent.toByteArray());
             }
+        } catch (FileNotFoundException ex) {
+            throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -49,13 +54,16 @@ public class EncryptionHandler {
      * @param secret The secret key used for decryption.
      * @param iv     The initialization vector for decryption.
      */
-    public void decryptFile(String path, SecretKey secret, byte[] iv) {
+    public void decryptFile(String path, SecretKey secret, byte[] iv) throws FileNotFoundException {
         try {
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, secret, new GCMParameterSpec(128, iv));
 
             File inputFile = new File(path);
             ByteArrayOutputStream encryptedContent = new ByteArrayOutputStream();
+
+            if (!inputFile.exists())
+                throw new FileNotFoundException(String.format("File %s does not exist", inputFile.getName()));
 
             try (InputStream inputStream = new FileInputStream(inputFile)) {
                 fileToByteArray(inputStream, cipher, encryptedContent);
@@ -83,6 +91,8 @@ public class EncryptionHandler {
                     System.out.println("Something went wrong trying to delete");
                 }
             }
+        } catch(FileNotFoundException ex) {
+            throw ex;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
